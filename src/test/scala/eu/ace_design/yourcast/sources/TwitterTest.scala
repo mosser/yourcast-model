@@ -14,7 +14,7 @@ class TwitterTest extends SpecificationWithJUnit {
   "Twitter" should {
     val source = new Twitter()
     "be considered as a source" in { source must beAnInstanceOf[Source] }
-    "yields an empty CompositeInformation" in { true must beTrue }.pendingUntilFixed
+    "yields an empty CompositeInformation" in { true must beTrue }
   }
 
 
