@@ -13,12 +13,18 @@ class CallContextTest extends SpecificationWithJUnit {
   "By construction, a CallContext" should {
 
     val context = CallContext("user" -> "myUserName", "apiKey" -> "myApiKey")
-    val empty = CallContext()
 
-    "be empty by default"        in { empty.keys must be empty }
-    "store pairs"                in { context.keys must contain(exactly("user", "apiKey")) }
-    "give access to a named key" in { context get "user" must_== "myUserName" }
+    "be empty by default"        in { CallContext().keys must be empty                       }
+    "store pairs"                in { context.keys must contain(exactly("user", "apiKey"))   }
+    "give access to a named key" in { context get "user" must_== "myUserName"                }
     "reject an unknown key"      in { context get "foo"  must throwA[NoSuchElementException] }
+  }
+
+  "For checking purpose, a CallContext" should {
+    val context = CallContext("user" -> "myUserName", "apiKey" -> "myApiKey")
+    "provide its contents"     in { context canProvide Set("user", "apiKey") must beTrue }
+    "provide a subset"         in { context canProvide Set("user") must beTrue           }
+    "reject a missing element" in { context canProvide Set("user", "foo") must beFalse   }
   }
 
   "When merged, a CallContext" should {
@@ -38,8 +44,10 @@ class CallContextTest extends SpecificationWithJUnit {
     }
 
     "take the last pairs when the contexts overlap" in {
-      val context = general U dummy U userSpecific
-      context get "user" must_== (userSpecific get "user")
+      val first =  general U dummy
+      val second = first U userSpecific
+      first  get "user" must_== (dummy        get "user")
+      second get "user" must_== (userSpecific get "user")
     }
   }
 }
