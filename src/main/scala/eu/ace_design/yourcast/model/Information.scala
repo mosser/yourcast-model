@@ -16,6 +16,7 @@ trait ScalarInformation extends Information
  * A Composite Information represent a set of related elements.
  * @param contents  the elements contained in this composite
  */
-final case class CompositeInformation(val contents: Information*) extends Information
-
+trait CompositeInformation extends Information  {
+  def flattened: Seq[Information]
+}
 

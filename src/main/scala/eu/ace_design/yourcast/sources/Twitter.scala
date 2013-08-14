@@ -15,8 +15,8 @@ package twitter {
     val needed = Set("authorization", "query")
 
     protected def call(ctx: CallContext) = ctx get "query" match {
-      case "anonymous" => CompositeInformation(TwitterMockDatabase.searchResults:_*)
-      case _ => CompositeInformation()
+      case "anonymous" => TwitterMockDatabase.searchResults
+      case _ => Seq()
     }
 
   }
@@ -26,8 +26,8 @@ package twitter {
     val needed = Set("authorization", "screen_name")
 
     protected def call(ctx: CallContext) = ctx get "screen_name" match {
-      case "myUserName" => CompositeInformation(TwitterMockDatabase.myTweets:_*)
-      case _ => CompositeInformation()
+      case "myUserName" => TwitterMockDatabase.myTweets
+      case _ => Seq()
     }
   }
 
@@ -63,16 +63,13 @@ package twitter {
 
     val searchResults = Seq(
       Tweet(user = User(id = 123, screenName = "Anonymous #1", profileImageUrl = "http://.../anonymous1.jpg"),
-            message = "an #anonymous message from anonymous guy", date = "2012-08-01 12:40"),
+            message = "an #anonymous message from an anonymous guy", date = "2012-08-01 12:40"),
       Tweet(user = User(id = 456, screenName = "Anonymous #2", profileImageUrl = "http://.../anonymous2.jpg"),
         message = "I'm nobody #anonymous", date = "2012-08-01 12:45"),
       Tweet(user = User(id = 789, screenName = "Anonymous #3", profileImageUrl = "http://.../anonymous3.jpg"),
         message = "BE #ANONYMOUS!", date = "2012-08-01 12:50")
     )
 
-    import java.util.Date
-    import java.text.SimpleDateFormat
-    implicit private def toDate(str: String): Date = new SimpleDateFormat("yyy-MM-dd HH:mm").parse(str)
   }
 
 
